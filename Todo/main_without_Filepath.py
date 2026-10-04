@@ -1,19 +1,10 @@
 # todos = []  # No longer required since we are reading lines from file - todos.txt
+# Without filepath argument in function get_todos()
+def get_todos():
+    with open('../files/todos.txt', 'r') as file_local:
+        todos_local = file_local.readlines()
+    return todos_local
 
-# Added argument to function get_todos, filepath is 'files/todos.txt'
-
-# Functions moved to a seperate file called fuctions.py
-
-import functions
-import time
-
-now = time.strftime("%b %d, %Y %H:%M:%S")
-print("It is", now)
-
-text = '''Principle of productivity: \n\
-Managing your inflow. \n\
-Systemizing everything which repeats.'''
-print(text)
 
 while True:
     user_action = input("Type add or show or edit or complete or exit: ")
@@ -22,16 +13,15 @@ while True:
     if user_action.startswith("add") or user_action.startswith("new"):
         todo = user_action[4:]
 
-        todos = functions.get_todos()
+        todos = get_todos()
 
         todos.append(todo.title() + "\n")
 
-        functions.write_todos(filepath='../files/todos.txt', todos_arg=todos)
-        '''with open('files/todos.txt', 'w') as file:
-            file.writelines(todos)'''
+        with open('../files/todos.txt', 'w') as file:
+            file.writelines(todos)
 
     elif user_action.startswith("show"):
-        todos = functions.get_todos()
+        todos = get_todos()
 
         # added index to get serial number
         for index, item in enumerate(todos):
@@ -41,14 +31,14 @@ while True:
 
     elif user_action.startswith("edit"):
         try:
-            todos = functions.get_todos()
+            todos = get_todos()
 
             number = int(user_action[5:])
             new_todo = input("Enter a new todo: ")
             todos[number] = new_todo + "\n"
 
-            functions.write_todos('files/todos.txt', todos)
-
+            with open('../files/todos.txt', 'w') as file:
+                file.writelines(todos)
         except ValueError:
             print("Edit command is not valid")
             # This will ignore the rest of the lines and go back to first line
@@ -56,13 +46,14 @@ while True:
 
     elif user_action.startswith("complete"):
         try:
-            todos = functions.get_todos()
+            todos = get_todos()
 
             number = int(user_action[9:]) - 1
             todo_to_remove = todos[number].strip("\n")
             todos.pop(number)
 
-            functions.write_todos('files/todos.txt', todos)
+            with open('../files/todos.txt', 'w') as file:
+                file.writelines(todos)
 
             message = f"Todo {todo_to_remove} was removed from the list"
             print(message)
