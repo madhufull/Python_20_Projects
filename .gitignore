@@ -1,1 +1,14 @@
 .DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+
+# PyCharm
+.idea/
+
+# Local files
+history.txt
